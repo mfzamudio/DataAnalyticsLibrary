@@ -1,0 +1,41 @@
+# ---------------------------------------------------------------------------
+# Runtime dependencies for the DataAnalyticsLibrary.
+# Install into a virtual environment:  pip install -r requirements.txt
+# Versions are pinned with a lower bound (>=) to stay reproducible while
+# allowing security/patch updates. Tested with Python 3.12.
+# ---------------------------------------------------------------------------
+
+# Core data handling
+pandas>=2.2,<3.0
+numpy>=1.26,<3.0
+
+# File-format support
+openpyxl>=3.1        # .xlsx reading/writing (used by dataloading.load_excel)
+pyarrow>=15.0        # .parquet support (used by dataloading.load_parquet)
+
+# Databases (SQL ingestion via dataloading.load_database)
+SQLAlchemy>=2.0
+# NOTE: install the driver matching your DB, e.g.:
+#   psycopg2-binary  (PostgreSQL)   |   pymysql (MySQL)   |   sqlite is built-in
+
+# Streaming ingestion (analytics.datastreaming) — OPTIONAL, require a broker.
+# The SimulatedStreamSource works with no extra deps; uncomment per backend:
+#   kafka-python>=2.0   # KafkaStreamSource  (Apache Kafka)
+#   pika>=1.3           # RabbitMQStreamSource (RabbitMQ)
+#   pyspark>=3.5        # Spark Structured Streaming (see template in the module)
+
+# Statistics & machine learning
+scipy>=1.12          # statistical tests, optimization (diagnostic/prescriptive)
+scikit-learn>=1.4    # predictive analytics & machine learning pipelines
+statsmodels>=0.14    # time-series decomposition (datavisualization)
+
+# Visualization
+matplotlib>=3.8
+seaborn>=0.13
+
+# Notebook environment
+jupyterlab>=4.0
+ipykernel>=6.29
+
+# Testing
+pytest>=8.0

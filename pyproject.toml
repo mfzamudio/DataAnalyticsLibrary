@@ -1,0 +1,44 @@
+# Project + pytest configuration.
+# Kept minimal: this repo is run from source (no packaging/install required),
+# so this file exists mainly to configure the test runner.
+
+[tool.pytest.ini_options]
+# Where the tests live.
+testpaths = ["tests"]
+# Standard discovery patterns.
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+# -q: quiet; --strict-markers: typo'd markers become errors, not silent skips.
+addopts = "-q --strict-markers"
+
+# ---------------------------------------------------------------------------
+# Pyright / Pylance configuration.
+# Read by Pylance (VS Code) and the pyright CLI. The single most important
+# setting is pointing the analyzer at the project's virtual environment so
+# installed packages (pandas, numpy, scikit-learn, scipy, ...) resolve and
+# stop showing as "import could not be resolved".
+# ---------------------------------------------------------------------------
+[tool.pyright]
+# Resolve imports against ./.venv (created via `python -m venv .venv`).
+venvPath = "."
+venv = ".venv"
+# "basic" is Pylance's default: catches real bugs without the strict-mode noise
+# that dynamic libraries like pandas trigger. Use "off" to disable type checks
+# entirely, or "strict" for maximum rigor.
+typeCheckingMode = "basic"
+# Only analyze our own code, not the dependencies' source.
+include = ["analytics", "tests", "data"]
+exclude = ["**/__pycache__", ".venv"]
+# kafka-python / pika are OPTIONAL deps (not installed by default). The code
+# imports them lazily and handles ImportError, so silence the missing-import
+# report globally as a safety net (the import lines also carry `# type: ignore`).
+reportMissingModuleSource = "none"
+# --- Third-party-stub friction (pandas/sklearn) ----------------------------
+# Pylance ships very strict bundled stubs for pandas. Our thin I/O wrappers
+# forward flexible types (e.g. Sequence[str]) into pandas readers whose stubs
+# demand invariant types (list[str], Literal['infer'], ...). At RUNTIME these
+# calls are valid, so these two reports are noise here, not real bugs. All
+# OTHER type checks (return types, variables, attributes) stay enabled.
+reportArgumentType = "none"
+reportCallIssue = "none"
