@@ -167,7 +167,7 @@ jupyter lab notebooks/pipeline_demo.ipynb
 
 ## Running the tests
 
-The library has a `pytest` suite (71 tests) covering every module. Plotting
+The library has a `pytest` suite (81 tests) covering every module. Plotting
 tests run headless via the `Agg` backend.
 
 ```bash
